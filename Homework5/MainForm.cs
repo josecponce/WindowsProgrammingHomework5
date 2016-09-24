@@ -62,5 +62,50 @@ namespace Homework5 {
             }
         }
 
+
+        private void CopyText_Event(object sender, EventArgs e)
+        {
+            try {
+                Clipboard.SetText(MainTextBox.SelectedText);
+            } catch (Exception ae) {
+                //nothing selected
+                MessageBox.Show("nothing selected");
+            }
+        }
+
+
+        private void CutText_Event(object sender, EventArgs e)
+        {
+            try
+            {
+                Clipboard.SetText(MainTextBox.SelectedText);
+                MainTextBox.SelectedText = "";
+            }
+            catch (Exception ae)
+            {
+                //nothing selected
+                MessageBox.Show("nothing selected");
+            }
+
+        }
+
+
+        private void PasteText_Event(object sender, EventArgs e)
+        {
+            try
+            {
+                MainTextBox.Paste(Clipboard.GetText().ToString());
+            }
+            catch (Exception ae)
+            {
+                //no data on clipboard
+                MessageBox.Show("no data on clipboard");
+            }
+
+           
+        }
+
+
+
     }
 }

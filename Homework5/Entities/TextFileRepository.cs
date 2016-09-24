@@ -24,7 +24,7 @@ namespace Homework5.Entities {
             return file;
         }
 
-        public void SaveTextFile(TextFile file, string path) {
+         public void SaveTextFile(TextFile file, string path) {
             using (Stream stream = File.OpenWrite(path)) {
                 formatter.Serialize(stream, file);
             }
