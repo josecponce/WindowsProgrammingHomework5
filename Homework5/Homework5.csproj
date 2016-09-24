@@ -52,6 +52,7 @@
     <Compile Include="Dialogs\OathDialog.Designer.cs">
       <DependentUpon>OathDialog.cs</DependentUpon>
     </Compile>
+    <Compile Include="Entities\TextFile.cs" />
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
     </Compile>
