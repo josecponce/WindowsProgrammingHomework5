@@ -29,13 +29,11 @@ namespace Homework5.Dialogs
         }
 
         private const string Description =
-            "Create a Multiple Document Interface application. "
-            + "The app will open child windows that are "
-            + "either ellipses, rectangles or custom shapes. "
-            + "One dimension(height or width) of each will "
-            + "be determined by a ratio that is set by the user. "
-            + "The child windows can have different colors and can "
-            + "be moved by the mouse.";
+            "Create a Single Document Interface (SDI) application " + 
+            "that implements a text editor. In order to open multiple " +
+            "files at the same time, multiple instances of the application " +
+            "must be started.Use a multiline text box to implement the editor. " +
+            "Do not use a rich text box. ";
     }
 }
 
