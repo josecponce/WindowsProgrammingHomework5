@@ -12,11 +12,14 @@ using Homework5.Dialogs;
 
 namespace Homework5 {
     public partial class Form1 : Form {
+
+        private AboutDialog aboutDialog;
+
         public Form1() {
             InitializeComponent();
         }
 
-
+        /*display the oath dialog*/
         private void oathToolStripMenuItem_Click(object sender, EventArgs e)
         {
             using (var dialog = new OathDialog())
@@ -28,9 +31,25 @@ namespace Homework5 {
             }
         }
 
-        private void helpToolStripMenuItem_Click(object sender, EventArgs e)
+        /*display the about dialog*/
+        private void aboutToolStripMenuItem_Click(object sender, EventArgs e)
         {
-
+            if (aboutDialog != null)
+            {
+                return;
+            }
+            aboutDialog = new AboutDialog();
+            aboutDialog.StartPosition = FormStartPosition.Manual;
+            aboutDialog.Location = new Point(this.Location.X,
+                this.Location.Y + this.Height);
+            aboutDialog.FormClosed += AboutDialog_FormClosed;
+            aboutDialog.Show();
         }
+
+        private void AboutDialog_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            aboutDialog = null;
+        }
+
     }
 }
