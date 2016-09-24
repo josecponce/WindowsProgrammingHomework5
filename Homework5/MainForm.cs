@@ -11,11 +11,11 @@ using Homework3ControlLib;
 using Homework5.Dialogs;
 
 namespace Homework5 {
-    public partial class Form1 : Form {
+    public partial class MainForm : Form {
 
         private AboutDialog aboutDialog;
 
-        public Form1() {
+        public MainForm() {
             InitializeComponent();
         }
 
@@ -49,6 +49,17 @@ namespace Homework5 {
         private void AboutDialog_FormClosed(object sender, FormClosedEventArgs e)
         {
             aboutDialog = null;
+        }
+
+        /*upon closing ask if the user wants to quit*/
+        private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            DialogResult result = MessageBox.Show("Are you sure you want to quit?",
+                "Exit Now?", MessageBoxButtons.OKCancel);
+            if (result == DialogResult.Cancel)
+            {
+                e.Cancel = true;
+            }
         }
 
     }
