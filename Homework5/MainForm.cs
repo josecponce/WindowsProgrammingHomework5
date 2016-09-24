@@ -51,5 +51,16 @@ namespace Homework5 {
             aboutDialog = null;
         }
 
+        /*upon closing ask if the user wants to quit*/
+        private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            DialogResult result = MessageBox.Show("Are you sure you want to quit?",
+                "Exit Now?", MessageBoxButtons.OKCancel);
+            if (result == DialogResult.Cancel)
+            {
+                e.Cancel = true;
+            }
+        }
+
     }
 }
