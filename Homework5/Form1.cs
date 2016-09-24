@@ -28,7 +28,9 @@ namespace Homework5 {
             }
         }
 
+        private void helpToolStripMenuItem_Click(object sender, EventArgs e)
+        {
 
-
+        }
     }
 }
