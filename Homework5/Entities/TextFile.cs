@@ -9,7 +9,6 @@ using Microsoft.Practices.Unity;
 namespace Homework5.Entities {
     [Serializable]
     public class TextFile {
-        [NonSerialized]
         private string text;
         public string Text {
             get { return text; }
@@ -18,16 +17,14 @@ namespace Homework5.Entities {
                 text = value;
             }
         }
-        [NonSerialized]
         private Color textColor;
         public Color TextColor {
-            get { return TextColor; }
+            get { return textColor; }
             set {
                 dirty = true;
                 textColor = value;
             }
         }
-        [NonSerialized]
         private Font font;
         public Font Font {
             get { return font; }
@@ -49,7 +46,9 @@ namespace Homework5.Entities {
         }
 
         public static TextFile LoadFromFile(string path) {
-            return fileRepository.LoadTextFile(path);
+            TextFile file = fileRepository.LoadTextFile(path);
+            file.dirty = false;
+            return file;
         }
     }
 }

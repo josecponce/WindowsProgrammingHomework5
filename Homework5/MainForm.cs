@@ -10,15 +10,23 @@ using System.Windows.Forms;
 using Homework3ControlLib;
 using Homework5.Dialogs;
 using System.IO;
+using Homework5.Entities;
 
 namespace Homework5 {
     public partial class MainForm : Form {
 
         private AboutDialog aboutDialog;
-        private object openFileDialog;
+        private TextFile file;
+        private string currentFilePath;
 
-        public MainForm() {
+        public MainForm() {            
             InitializeComponent();
+            file = new TextFile {
+                Font = MainTextBox.Font,
+                TextColor = MainTextBox.ForeColor,
+                Text = "",
+                dirty = false
+            };
         }
 
         /*display the oath dialog*/
@@ -56,11 +64,20 @@ namespace Homework5 {
         /*upon closing ask if the user wants to quit*/
         private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
         {
+            if(file.dirty)
+                promptSaveBeforeChangesLost();
             DialogResult result = MessageBox.Show("Are you sure you want to quit?",
                 "Exit Now?", MessageBoxButtons.OKCancel);
             if (result == DialogResult.Cancel)
             {
                 e.Cancel = true;
+            }
+        }
+
+        private void promptSaveBeforeChangesLost() {
+            DialogResult result = MessageBox.Show("Do you want to save before continuing?", "", MessageBoxButtons.YesNo);
+            if (result == DialogResult.Yes) {
+                saveToolStripMenuItem_Click(null, null);
             }
         }
 
@@ -103,45 +120,48 @@ namespace Homework5 {
                 //no data on clipboard
                 MessageBox.Show("no data on clipboard");
             }        
-        }
+        }        
 
         private void newToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if(MainTextBox.Text != null)
+            if(file.dirty)
             {
-                DialogResult result =  MessageBox.Show("You do want to save before opening a new file", "", MessageBoxButtons.YesNo);
-                if(result == DialogResult.Yes)
-                {
-                    saveToolStripMenuItem_Click(sender, e);
-                }
-                if(result == DialogResult.No)
-                {
-                    MainTextBox.Clear();
-                }
-            }    
+                promptSaveBeforeChangesLost();
+            }
+            file = new TextFile {
+                Font = MainTextBox.Font,
+                TextColor = MainTextBox.ForeColor,
+                Text = ""
+            };
+            MainTextBox.Text = file.Text;
+            currentFilePath = null;
         }
 
         private void openToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            DialogResult result = mainOpenFileDialog.ShowDialog(); // Show the dialog.
-            if (result == DialogResult.OK) // Test result.
+            if (file.dirty)
+                promptSaveBeforeChangesLost();
+            DialogResult result = mainOpenFileDialog.ShowDialog(); 
+            if (result == DialogResult.OK) 
             {
-                string file = mainOpenFileDialog.FileName;
-                try
-                {
-                     MainTextBox.Paste( File.ReadAllText(file));
-                }
-                catch (IOException){}
+                currentFilePath = mainOpenFileDialog.FileName;
+                file = TextFile.LoadFromFile(currentFilePath);
+
+                MainTextBox.Text = file.Text;
+                MainTextBox.Font = file.Font;
+                MainTextBox.ForeColor = file.TextColor;
             }
         }
 
         private void saveToolStripMenuItem_Click(object sender, EventArgs e)
-        {   
-            SaveFileDialog saveFileDialog = new SaveFileDialog();
-            saveFileDialog.ShowDialog();
-
-            string path = saveFileDialog.FileName;
-            File.WriteAllText(path += ".txt", MainTextBox.Text);
+        {
+            if (currentFilePath == null) {
+                using (SaveFileDialog saveFileDialog = new SaveFileDialog()) {
+                    saveFileDialog.ShowDialog();
+                    currentFilePath = saveFileDialog.FileName;
+                }
+            }
+            file.Save(currentFilePath);
         }
 
         private void exitToolStripMenuItem_Click(object sender, EventArgs e)
@@ -172,8 +192,15 @@ namespace Homework5 {
         private void Preference_Apply(object sender, EventArgs e)
         {
             this.MainTextBox.Font = ((PreferencesForm)sender).CurrentFont;
+            file.Font = this.MainTextBox.Font;
             this.MainTextBox.ForeColor = ((PreferencesForm)sender).CurrentColor;
+            file.TextColor = this.MainTextBox.ForeColor;
+        }
 
+        private void MainTextBox_TextChanged(object sender, EventArgs e) {
+            if (MainTextBox.Text != file.Text) {
+                file.Text = MainTextBox.Text;
+            }
         }
     }
 }
