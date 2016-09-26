@@ -9,11 +9,13 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using Homework3ControlLib;
 using Homework5.Dialogs;
+using System.IO;
 
 namespace Homework5 {
     public partial class MainForm : Form {
 
         private AboutDialog aboutDialog;
+        private object openFileDialog;
 
         public MainForm() {
             InitializeComponent();
@@ -100,12 +102,52 @@ namespace Homework5 {
             {
                 //no data on clipboard
                 MessageBox.Show("no data on clipboard");
-            }
-
-           
+            }        
         }
 
+        private void newToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if(MainTextBox.Text != null)
+            {
+                DialogResult result =  MessageBox.Show("You do want to save before opening a new file", "", MessageBoxButtons.YesNo);
+                if(result == DialogResult.Yes)
+                {
+                    saveToolStripMenuItem_Click(sender, e);
+                }
+                if(result == DialogResult.No)
+                {
+                    MainTextBox.Clear();
+                }
+            }    
+        }
 
+        private void openToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            DialogResult result = openFileDialog1.ShowDialog(); // Show the dialog.
+            if (result == DialogResult.OK) // Test result.
+            {
+                string file = openFileDialog1.FileName;
+                try
+                {
+                     MainTextBox.Paste( File.ReadAllText(file));
+                }
+                catch (IOException){}
+            }
+        }
 
+        private void saveToolStripMenuItem_Click(object sender, EventArgs e)
+        {   
+            SaveFileDialog saveFileDialog = new SaveFileDialog();
+            saveFileDialog.ShowDialog();
+
+            string path = saveFileDialog.FileName;
+            File.WriteAllText(path += ".txt", MainTextBox.Text);
+        }
+
+        private void exitToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            this.Close();
+        }
     }
 }
+  
