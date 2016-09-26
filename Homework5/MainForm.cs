@@ -135,6 +135,8 @@ namespace Homework5 {
             };
             MainTextBox.Text = file.Text;
             currentFilePath = null;
+
+            StatusStripLabel.Text = "Unsaved File";
         }
 
         private void openToolStripMenuItem_Click(object sender, EventArgs e)
@@ -151,17 +153,28 @@ namespace Homework5 {
                 MainTextBox.Font = file.Font;
                 MainTextBox.ForeColor = file.TextColor;
             }
+            StatusStripLabel.Text = currentFilePath;
         }
 
         private void saveToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (currentFilePath == null) {
+            saveFile(currentFilePath == null);
+        }
+        private void saveAsToolStripMenuItem_Click(object sender, EventArgs e) {
+            saveFile(true);
+        }
+
+        private void saveFile(bool promptUser) {
+            if (promptUser) {
                 using (SaveFileDialog saveFileDialog = new SaveFileDialog()) {
-                    saveFileDialog.ShowDialog();
+                    DialogResult result = saveFileDialog.ShowDialog();
+                    if (result != DialogResult.OK)
+                        return;
                     currentFilePath = saveFileDialog.FileName;
                 }
             }
             file.Save(currentFilePath);
+            StatusStripLabel.Text = currentFilePath;
         }
 
         private void exitToolStripMenuItem_Click(object sender, EventArgs e)
