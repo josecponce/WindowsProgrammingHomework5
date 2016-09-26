@@ -123,10 +123,10 @@ namespace Homework5 {
 
         private void openToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            DialogResult result = openFileDialog1.ShowDialog(); // Show the dialog.
+            DialogResult result = mainOpenFileDialog.ShowDialog(); // Show the dialog.
             if (result == DialogResult.OK) // Test result.
             {
-                string file = openFileDialog1.FileName;
+                string file = mainOpenFileDialog.FileName;
                 try
                 {
                      MainTextBox.Paste( File.ReadAllText(file));
