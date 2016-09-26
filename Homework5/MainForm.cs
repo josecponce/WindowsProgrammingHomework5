@@ -148,6 +148,33 @@ namespace Homework5 {
         {
             this.Close();
         }
+
+        private void preferencesToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            foreach (Form f in Application.OpenForms)
+            {
+                if (f is PreferencesForm)
+                {
+                    if (f.WindowState == FormWindowState.Minimized)
+                        f.WindowState = FormWindowState.Normal;
+                    f.Focus();
+                    f.BringToFront();
+                    f.Focus();
+                    return;
+                }
+            }
+
+            PreferencesForm pForm = new PreferencesForm(this.MainTextBox.ForeColor, this.MainTextBox.Font);
+            pForm.Apply += Preference_Apply;
+            pForm.Show();
+        }
+
+        private void Preference_Apply(object sender, EventArgs e)
+        {
+            this.MainTextBox.Font = ((PreferencesForm)sender).CurrentFont;
+            this.MainTextBox.ForeColor = ((PreferencesForm)sender).CurrentColor;
+
+        }
     }
 }
   
